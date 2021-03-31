@@ -9,6 +9,7 @@ exports.handler = async (inputObj) => {
 
   return {
     processed: true,
+    s3cfg: inputObj.s3cfg,
     input: inputObj,
   };
 };

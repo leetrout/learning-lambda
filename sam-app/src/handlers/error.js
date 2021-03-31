@@ -1,10 +1,23 @@
-exports.handler = async (error) => {
-  // If you change this message, you will need to change hello-from-lambda.test.js
-  const message = "the error handler";
+const { S3 } = require("@aws-sdk/client-s3");
 
-  // All log statements are written to CloudWatch
-  console.info(`${message}`);
-  console.error(error);
+exports.handler = async (inputObj) => {
+  const LM_S3_BUCKET = process.env.LM_S3_BUCKET;
+  if (!LM_S3_BUCKET) {
+    throw new Error(`bucket is not defined: ${util.inspect(process.env)}`);
+  }
 
-  return message;
+  const result = {
+    success: false,
+    error: true,
+    input: inputObj,
+  };
+
+  const s3Client = new S3();
+  await s3Client.putObject({
+    Bucket: LM_S3_BUCKET,
+    Key: inputObj.s3cfg.error,
+    Body: JSON.stringify(result, null, "  "),
+  })
+
+  return result
 };

@@ -15,6 +15,7 @@
                     "ErrorEquals": [
                         "States.ALL"
                     ],
+                    "ResultPath": "$.error",
                     "Next": "Catch Error"
                 }
             ],
